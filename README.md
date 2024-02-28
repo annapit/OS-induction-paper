@@ -1,7 +1,7 @@
 # OS-induction-paper
 This repository contains the source code utilized to solve both the Orr-Sommerfeld equation and the coupled Orr-Sommerfeld and induction equations relevant to the research paper:
 
-- A. Piterskaya, M. Mortensen; "A study of the Orr-Sommerfeld and induction equations by Galerkin and Petrov-Galerkin spectral methods utilizing Chebyshev polynomials"
+- A. Piterskaya, M. Mortensen; "A study of the Orr-Sommerfeld and induction equations by Galerkin and Petrov-Galerkin spectral methods utilizing Chebyshev polynomials", 2024
 
 The model described in the paper has been implemented within the spectral Galerkin framework Shenfun (https://github.com/spectralDNS/shenfun), version 4.1.1.
 
