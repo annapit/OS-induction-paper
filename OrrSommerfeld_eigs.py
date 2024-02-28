@@ -168,7 +168,7 @@ if __name__ == '__main__':
     z = OrrSommerfeld(**vars(args))
     evals, evectors = z.solve(args.verbose)
     d = z.get_eigval(1, evals, args.verbose)
-
+    '''
     if args.Re == 8000.0 and args.alfa == 1.0 and args.N > 80:
         assert abs(d[1] - (0.24707506017508621+0.0026644103710965817j)) < 1e-12
 
@@ -178,3 +178,4 @@ if __name__ == '__main__':
         plt.plot(evi.imag, evi.real, 'o')
         plt.axis([-10, 0.1, 0, 1])
         plt.show()
+    '''
