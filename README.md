@@ -16,3 +16,5 @@ The code in this repository can be tested using a codespace. Press the green Cod
 in the terminal of the codespace after the installation is finished. You may then run the program using
 
     python OrrSommerfeld_eigs.py
+
+Please also refer to the Jupyter Notebook file 'analysis.ipynb' for examples on calculating eigenvalues and condition numbers for both the Orr-Sommerfeld equation and the coupled Orr-Sommerfeld and induction equations.
