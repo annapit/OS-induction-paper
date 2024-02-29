@@ -1,22 +1,14 @@
 """
 Solve the Orr-Sommerfeld eigenvalue problem
-
-Using Shen's biharmonic basis
-
 """
 import warnings
 from scipy.linalg import eig
-#from numpy.linalg import eig
-#from numpy.linalg import inv
 import numpy as np
 import sympy as sp
 from shenfun import FunctionSpace, Function, Dx, inner, TestFunction, \
     TrialFunction
 
 np.seterr(divide='ignore')
-
-#pylint: disable=no-member
-
 try:
     from matplotlib import pyplot as plt
 
@@ -34,7 +26,8 @@ class OrrSommerfeld:
         assert self.test in ('PG', 'G')
 
     def interp(self, y, eigvals, eigvectors, eigval=1, verbose=False):
-        """Interpolate solution eigenvector and it's derivative onto y
+        """
+        Interpolate solution eigenvector and it's derivative onto y
 
         Parameters
         ----------
@@ -95,7 +88,7 @@ class OrrSommerfeld:
         a = self.alfa
         B = -Re*a*1j*(K-a**2*M)
         A = Q-2*a**2*K+(a**4 - 2*a*Re*1j)*M - 1j*a*Re*(K2-a**2*K1)
-        A, B = Q.diags().toarray(), B.diags().toarray()
+        A, B = A.diags().toarray(), B.diags().toarray()
         if scale is not None:
             assert isinstance(scale, tuple)
             assert len(scale) == 2
@@ -104,24 +97,22 @@ class OrrSommerfeld:
             testp = 1/(k+1)**(-s0) if s0 < 0 else (k+1)**s0
             trialp = 1/(k+1)**(-s1) if s1 < 0 else (k+1)**s1
             d =  testp[:, None] * trialp[None, :]
-            ##d = (1/A.diagonal())[:, None]
-            A *= d # * A
-            B *= d # * B
+            A *= d
+            B *= d
         return A, B
 
     def solve(self, verbose=False, scale=None):
-        """Solve the Orr-Sommerfeld eigenvalue problem
-        """
+        # Solve the Orr-Sommerfeld eigenvalue problem
         if verbose:
             print('Solving the Orr-Sommerfeld eigenvalue problem...')
             print('Re = '+str(self.Re)+' and alfa = '+str(self.alfa))
         A, B = self.assemble(scale=scale)
         return eig(A, B)
-        # return eig(np.dot(inv(B), A))
 
     @staticmethod
     def get_eigval(nx, eigvals, verbose=False):
-        """Get the chosen eigenvalue
+        """
+        Get the chosen eigenvalue
 
         Parameters
         ----------
@@ -132,7 +123,6 @@ class OrrSommerfeld:
                 Computed eigenvalues
             verbose : bool, optional
                 Print the value of the chosen eigenvalue. Default is False.
-
         """
         indices = np.argsort(np.imag(eigvals))
         indi = indices[-1*np.array(nx)]
@@ -164,11 +154,10 @@ if __name__ == '__main__':
     parser.set_defaults(plot=False)
     parser.set_defaults(verbose=False)
     args = parser.parse_args()
-    #z = OrrSommerfeld(N=120, Re=5772.2219, alfa=1.02056)
     z = OrrSommerfeld(**vars(args))
     evals, evectors = z.solve(args.verbose)
     d = z.get_eigval(1, evals, args.verbose)
-    '''
+
     if args.Re == 8000.0 and args.alfa == 1.0 and args.N > 80:
         assert abs(d[1] - (0.24707506017508621+0.0026644103710965817j)) < 1e-12
 
@@ -178,4 +167,3 @@ if __name__ == '__main__':
         plt.plot(evi.imag, evi.real, 'o')
         plt.axis([-10, 0.1, 0, 1])
         plt.show()
-    '''

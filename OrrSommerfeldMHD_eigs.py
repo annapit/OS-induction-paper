@@ -1,21 +1,14 @@
 """
-Solve the Orr-Sommerfeld eigenvalue problem
-
-Using Shen's biharmonic basis
-
+Solve the Orr-Sommerfeld eigenvalue problem for MHD flow in a channel.
 """
 import warnings
 from scipy.linalg import eig
-#from numpy.linalg import eig
-#from numpy.linalg import inv
 import numpy as np
 import sympy as sp
 from shenfun import FunctionSpace, Function, Dx, inner, TestFunction, \
     TrialFunction, MixedFunctionSpace, BlockMatrix
 
 np.seterr(divide='ignore')
-
-#pylint: disable=no-member
 
 try:
     from matplotlib import pyplot as plt
@@ -130,25 +123,19 @@ class OrrSommerfeldMHD:
         return AA, BB
 
     def solve(self, verbose=False):
-        """Solve the Orr-Sommerfeld eigenvalue problem
+        """
+        Solve the coupled Orr-Sommerfeld and induction equations
         """
         if verbose:
-            print('Solving the Orr-Sommerfeld eigenvalue problem...')
+            print('Solving the Orr-Sommerfeld and induction eigenvalue problem...')
             print('Re = '+str(self.Re)+' and alfa = '+str(self.alfa))
         A, B = self.assemble()
-        #k = np.arange(self.N-4)
-        #testp = 1/(k+1)**2
-        #trialp = 1/(k+1)**2
-        #d =  testp[:, None] * trialp[None, :]
-        #d = (1/A.diagonal())[:, None]
-        #A *= d # * A
-        #B *= d # * B
         return eig(A, B)
-        # return eig(np.dot(inv(B), A))
 
     @staticmethod
     def get_eigval(nx, eigvals, verbose=False):
-        """Get the chosen eigenvalue
+        """
+        Get the chosen eigenvalue
 
         Parameters
         ----------
@@ -159,7 +146,6 @@ class OrrSommerfeldMHD:
                 Computed eigenvalues
             verbose : bool, optional
                 Print the value of the chosen eigenvalue. Default is False.
-
         """
         indices = np.argsort(np.imag(eigvals))
         indi = indices[-1*np.array(nx)]
@@ -199,12 +185,9 @@ if __name__ == '__main__':
     evals, evectors = z.solve(args.verbose)
     d = z.get_eigval(1, evals, args.verbose)
 
-    #if args.Re == 8000.0 and args.alfa == 1.0 and args.N > 80:
-    #    assert abs(d[1] - (0.24707506017508621+0.0026644103710965817j)) < 1e-12
-
-    #if args.plot:
-    #    plt.figure()
-    #    evi = evals*z.alfa
-    #    plt.plot(evi.imag, evi.real, 'o')
-    #    plt.axis([-10, 0.1, 0, 1])
-    #    plt.show()
+    if args.plot:
+        plt.figure()
+        evi = evals*z.alfa
+        plt.plot(evi.imag, evi.real, 'o')
+        plt.axis([-10, 0.1, 0, 1])
+        plt.show()
